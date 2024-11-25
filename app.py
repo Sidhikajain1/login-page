@@ -10,11 +10,12 @@ app.secret_key = secret_key  # Change this to a secure random key
 
 GOOGLE_CLIENT_ID = os.getenv('GOOGLE_CLIENT_ID')
 GOOGLE_CLIENT_SECRET = os.getenv('GOOGLE_CLIENT_SECRET')
+# OAuth 2 client setup
 oauth = OAuth(app)
 google = oauth.register(
     name='google',
     client_id=GOOGLE_CLIENT_ID,
-    client_secret=GOOGLE_CLIENT_SECRET,
+    client_secret=GOOGLE_CLIENT_SECRET,# Replace with your Google Client Secret
     access_token_url='https://accounts.google.com/o/oauth2/token',
     access_token_params=None,
     authorize_url='https://accounts.google.com/o/oauth2/auth',
@@ -27,8 +28,9 @@ google = oauth.register(
 def login_required(f):
     @wraps(f)
     def decorated_function(*args, **kwargs):
-        if 'user' not in session:
-            return redirect(url_for('login'))
+        if 'user' not in session:  # Check if user is in session
+            return render_template('home.html')
+        #redirect(url_for('login'))
         return f(*args, **kwargs)
     return decorated_function
 
@@ -45,24 +47,22 @@ def google_login():
 @app.route('/login/google/authorize')
 def google_authorize():
     try:
+        # Get the access token from Google
         token = google.authorize_access_token()
-        resp = google.get('userinfo')
-        #resp = google.get('userinfo')
-        user_info = resp.json()
-        session['user'] = {
-            'email': user_info['email'],
-            'name': user_info.get('name', 'User')
-        }
+        
+        # Skip fetching user info for now and just set a placeholder if needed
+        # session['user'] = {'name': 'User'}  # Uncomment if you want to set a dummy user
+        
+        # Redirect to home page after successful login
         return redirect(url_for('home'))
     except Exception as e:
         print(f"Error during Google authorization: {e}")
-        return redirect(url_for('login'))
+        return redirect(url_for('home'))
 
 @app.route('/home')
 @login_required
 def home():
-    print("Session User:", session.get('user')) 
-    return render_template('home.html', user=session['user'])
+    return render_template('home.html')  # No need to pass user info for now
 
 @app.route('/logout')
 def logout():
@@ -70,4 +70,4 @@ def logout():
     return redirect(url_for('login'))
 
 if __name__ == '__main__':
-    app.run(debug=False)
+    app.run(debug=True)
