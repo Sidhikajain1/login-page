@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Home</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100 min-h-screen">
+    <nav class="bg-white shadow-lg">
+        <div class="max-w-6xl mx-auto px-4">
+            <div class="flex justify-between items-center py-4">
+                <div class="text-xl font-semibold text-gray-800">Home</div> <!-- Changed "Welcome" to "Home" here -->
+                <div class="flex items-center space-x-4">
+                    <a href="{{ url_for('logout') }}" 
+                       class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-md text-sm">
+                        Logout
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+    
+    <div class="max-w-6xl mx-auto px-4 py-8">
+        <div class="bg-white shadow rounded-lg p-6">
+            <h1 class="text-2xl font-bold mb-4 text-center">Welcome to the Home Page!</h1> <!-- This will show once in the body -->
+            <p class="text-gray-600 text-center">You are logged in successfully.</p>
+        </div>
+    </div>
+</body>
+</html>
